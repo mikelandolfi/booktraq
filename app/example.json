@@ -1,0 +1,72 @@
+{
+  "kind": "books#volumes",
+  "totalItems": 1,
+  "items": [
+    {
+      "kind": "books#volume",
+      "id": "-3eiwwEACAAJ",
+      "etag": "wfhdbyVFpRw",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/-3eiwwEACAAJ",
+      "volumeInfo": {
+        "title": "Oma Suomi 2",
+        "subtitle": "Suomea aikuisille",
+        "authors": [
+          "Kristiina Kuparinen",
+          "Terhi Tapaninen"
+        ],
+        "publishedDate": "2016",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_10",
+            "identifier": "9511283790"
+          },
+          {
+            "type": "ISBN_13",
+            "identifier": "9789511283799"
+          }
+        ],
+        "readingModes": {
+          "text": false,
+          "image": false
+        },
+        "pageCount": 247,
+        "printType": "BOOK",
+        "categories": [
+          "Finnish language"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "language": "fi",
+        "previewLink": "http://books.google.com/books?id=-3eiwwEACAAJ&dq=isbn:9789511283799&hl=&cd=1&source=gbs_api",
+        "infoLink": "http://books.google.com/books?id=-3eiwwEACAAJ&dq=isbn:9789511283799&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Oma_Suomi_2.html?hl=&id=-3eiwwEACAAJ"
+      },
+      "saleInfo": {
+        "country": "US",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "US",
+        "viewability": "NO_PAGES",
+        "embeddable": false,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": false
+        },
+        "pdf": {
+          "isAvailable": false
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=-3eiwwEACAAJ&hl=&printsec=frontcover&source=gbs_api",
+        "accessViewStatus": "NONE",
+        "quoteSharingAllowed": false
+      }
+    }
+  ]
+}

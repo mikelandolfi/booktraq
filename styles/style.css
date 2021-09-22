@@ -1,0 +1,16 @@
+body { 
+    background-color: gray;
+}
+textarea { 
+    overflow-y: scroll;
+}
+.textheading { 
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.center { 
+    text-align: center;
+}
+.actionbtn { 
+    padding: 2px 2px 2px 2px 
+}

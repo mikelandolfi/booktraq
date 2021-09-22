@@ -1,0 +1,21 @@
+{
+  "name": "booktraq",
+  "version": "0.1.0",
+  "description": "A book inventory program that takes ISBN codes as input either through text entry or barcode, and queries the Google Books API for information about them.",
+  "main": "./app/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mike Landolfi",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^4.6.0",
+    "datatables.net": "^1.11.2",
+    "datatables.net-dt": "^1.11.2",
+    "electron": "^14.0.1",
+    "jquery": "^3.6.0",
+    "mysql": "^2.18.1",
+    "sweetalert2": "^11.1.5"
+  }
+}

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<link rel="stylesheet" type="text/css" href="../styles/style.css">
+<link rel="stylesheet" type="text/css" href="../styles/bootstrap/4.6.0/bootstrap.min.css">
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="Content-Security-Policy"
+            content="
+                default-src 'self' 'unsafe-inline';
+                script-src 'self' 'unsafe-inline' 'unsafe-eval';
+                connect-src *
+            "
+        >
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>BookTraq</title>
+    </head>
+    <body>
+        <h1 class="center">Welcome to BookTraq!</h1>
+        <div>
+            <label class="textheading">Enter ISBN-13:</label>
+            <input type="text" id="isbn" />
+            <button id="submit" class="actionbtn">Submit</button>
+        </div>
+        <div>
+            <textarea id="booksSearched" cols="100" rows="30"></textarea>
+        </div>
+    </body>
+    <script>
+        require('./renderer');
+    </script>
+</html>

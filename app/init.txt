@@ -1,0 +1,21 @@
+install node!
+download from website or install using package manager.  this code was developed on a system running v16.3.0
+
+then install electron!
+'npm i -D electron@latest'
+
+then install mysql!
+'npm install mysql'
+
+and sweetalert2, jq, styling and datatables! note that this is only the JS portion of Bootstrap
+'npm install sweetalert2'
+'npm install jquery'
+'npm install bootstrap bootstrap@4.6.0'
+'npm install datatables.net datatables.net-dt'
+
+to run the app:
+'npm start' from within the booktraq home dir 
+
+more todos:
+--add login for admin user so nonadmins cannot access the inventory (this will require adding a user table and roles)
+--add ability to remove from inventory (like for a sale) and supply a reason for removal (see db fields)
