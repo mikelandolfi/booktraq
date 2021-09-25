@@ -1,14 +1,9 @@
-require('jquery');
+//require('jquery');
 const exec = require('child_process').exec;
 const swal = require('sweetalert2');
 const mysql = require('mysql');
 
-// TODO use the barcode scanner and see if this really has focus on load 
-jQuery(function() { 
-	document.getElementById('isbn').focus(); 
-});
-//document.getElementById('isbn').focus(); 
-// test isbn13: 9789511283799 (Oma Suomi 2 textbook)
+resetForm();
 // allow manual entry...
 const submitButton = document.getElementById('submit');
 submitButton.addEventListener('click', () => {
@@ -24,6 +19,7 @@ isbn_textbox.addEventListener('input', () => {
 	}
 });
 function parseBookData(isbn, callback) { 
+	if (isbn.length === 0) return; 
 	const commandString = `curl 'https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}'`;
 	exec(commandString, (err, stdout, stderr) => {
 		if (err) {
@@ -33,19 +29,27 @@ function parseBookData(isbn, callback) {
         // TODO need error handling for books not found; what does stdout look like then?
 		let bookinfo = JSON.parse(stdout);
 		if (bookinfo.totalItems == 0) { 
-			console.log("book not found!");
+			swal.fire({
+				text: 'Book not found!', 
+				icon: 'error'
+			}).then(() => {
+				isbn_textbox.value = '';
+			});
 			// TODO error handling for books not found (once added, offer redirect to manual entry form)
-			return; // TODO make this an if/else instead 
+			return; // TODO make this an if/else instead? 
 		}
 		let volumeInfo = bookinfo.items[0].volumeInfo;
 		let book = {};
 		let authors = '';
-		volumeInfo.authors.forEach((value, index) => {
-		    authors += value;
-		    if (index != volumeInfo.authors.length - 1) {
-			    authors += ', ';
-		    }
-		});
+		// some books have titles but no authors (see ISBN 9789510244627 for an example)!
+		if (volumeInfo.authors) { 
+			volumeInfo.authors.forEach((value, index) => {
+				authors += value;
+				if (index != volumeInfo.authors.length - 1) {
+					authors += ', ';
+				}
+			});
+		}
 		book.authors = authors; 
 		let categories = '';
 		volumeInfo.categories.forEach((value, index) => {
@@ -71,16 +75,15 @@ function parseBookData(isbn, callback) {
 		[book.subtitle, book.title] = [volumeInfo.subtitle, volumeInfo.title];
 		let details = book.title + ' by ' + ((book.authors) ? book.authors : 'unknown author(s)');
 		document.getElementById('booksSearched').innerHTML += details + "\n";
-		console.log(book); 
 		callback(book);
     });
 }
 function processBook(book) { 
-	let skipAlert = false; // set to true for fast insertions; TODO put this value in a .env 
+	let canSkipModal = false; // set to true for fast insertions; TODO put this value in a .env and fix its side effects 
 	console.log(`book is ${book}`); 
-	if (book && !skipAlert) { 
+	if (book && !canSkipModal) { 
 		swal.fire({ // TODO add option to delete (for a sale, loss, etc.); maybe chain another swal with comment box for reason
-			text: book.title + ' by ' + book.authors, 
+			text: book.title + ' by ' + ((book.authors) ? book.authors : 'unknown author(s)'), 
 			icon: 'info', 
 			showCancelButton: true,
 			confirmButtonText: 'Add to Database', 
@@ -92,12 +95,13 @@ function processBook(book) {
 				swal.fire({
 					text: 'Canceled; book not added.', 
 					icon: 'warning'
+				}).then(() => {
+					resetForm();
 				});
 			}
 		});
 	} else if (book) { 
 		addToDatabase(book);
-		document.getElementById('isbn').focus(); 
 	}
 }
 // TODO these will also have to come from .env files not in source control 
@@ -117,17 +121,17 @@ function addToDatabase(book) { // TODO can we move the connection out of here, m
 		// a title might change slightly with issuing of new editions and that makes 
 		// title a poor match string.  
 		let query = 'SELECT COUNT(Id) AS Total, Id FROM Book WHERE (ISBN13=? OR ISBN10=?)'; 
-		console.log(query);
+		//console.log(query);
 		connection.query(query, [book.isbn13, book.isbn10], function(err, result) { 
 			if (err) { 
 				console.log(err); 
 				return;
 			}
-			console.log(result); 
+			//console.log(result); 
 			if (result[0].Total == 0) { // book is not in inventory, so add it
 				query = 'INSERT INTO Book (Title, Subtitle, Authors, PrintType, PublicationDate, Language, ' + 
 					'PageCount, ISBN10, ISBN13, Quantity, DateAdded) VALUES (?)';
-				console.log(query);
+				//console.log(query);
 				let values = [book.title, book.subtitle, book.authors, book.printType, book.publishedDate, book.language, 
 					book.pageCount, book.isbn10, book.isbn13, 1, new Date()];
 				connection.query(query, [values], function(err, result) { 
@@ -139,6 +143,8 @@ function addToDatabase(book) { // TODO can we move the connection out of here, m
 						swal.fire({
 							text: 'Added to database!', 
 							icon: 'success'
+						}).then(() => {
+							resetForm();
 						});
 					}
 				});
@@ -146,7 +152,7 @@ function addToDatabase(book) { // TODO can we move the connection out of here, m
 			else { // the book IS in the inventory, so update the quantity
 				// update
 				query = 'UPDATE Book SET Quantity = Quantity + 1 WHERE Id=?'; // consider adding a comment with the date 
-				console.log(query);
+				//console.log(query);
 				let id = result[0].Id;
 				connection.query(query, id, function(err, result) { 
 					if (err) { 
@@ -157,10 +163,16 @@ function addToDatabase(book) { // TODO can we move the connection out of here, m
 						swal.fire({
 							text: 'Book quantity updated!', 
 							icon: 'success'
-						})
+						}).then(() => {
+							resetForm();
+						});
 					}
 				});
 			}
 		});
 	});
+}
+function resetForm() { 
+	document.getElementById('isbn').value = ''; 
+	document.getElementById('isbn').focus(); 
 }
