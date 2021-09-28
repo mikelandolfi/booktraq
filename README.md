@@ -6,6 +6,7 @@ BookTraq is a simple Electron desktop application that accepts as input the ISBN
 The code checks for the presence of a flag before displaying the modal popup asking the user whether the data should be saved; this can be set to allow rapid input of a large batch of books.
 
 ## Future Improvements: 
+0. Tests!  Jasmine?
 1. Manual entry of books not found on the API query via a form with appropriate validation; 
 2. Colors and better styling: media queries, dynamic resizing of text area, etc. 
 3. Reporting (DataTables?) to allow rapid searching of the database.
