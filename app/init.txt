@@ -1,3 +1,4 @@
+#install curl if using on Linux! 
 #install node! download from website or install using package manager.  this code was developed on a system running v16.3.0.  be sure the node_modules folder is created per package.json.
 
 #then install electron!

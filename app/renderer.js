@@ -52,12 +52,14 @@ function parseBookData(isbn, callback) {
 		}
 		book.authors = authors; 
 		let categories = '';
-		volumeInfo.categories.forEach((value, index) => {
-			categories += value;
-			if (index != volumeInfo.categories.length - 1) {
-				categories += ', ';
-			}
-		});
+		if (volumeInfo.categories != null && volumeInfo.categories.length > 0) { 
+			volumeInfo.categories.forEach((value, index) => {
+				categories += value;
+				if (index != volumeInfo.categories.length - 1) {
+					categories += ', ';
+				}
+			});
+		}
 		book.categories = categories;
 		let ids = volumeInfo.industryIdentifiers;
         // TODO do I need to check for more identifiers? 
@@ -80,10 +82,10 @@ function parseBookData(isbn, callback) {
 }
 function processBook(book) { 
 	let canSkipModal = false; // set to true for fast insertions; TODO put this value in a .env and fix its side effects 
-	console.log(`book is ${book}`); 
+	// console.log(`book is ${book}`);  // debugging the object 
 	if (book && !canSkipModal) { 
 		swal.fire({ // TODO add option to delete (for a sale, loss, etc.); maybe chain another swal with comment box for reason
-			text: book.title + ' by ' + ((book.authors) ? book.authors : 'unknown author(s)'), 
+			text: book.title + ((book.subtitle) ? (' ' + book.subtitle) : '') + ' by ' + ((book.authors) ? book.authors : 'unknown author(s)'), 
 			icon: 'info', 
 			showCancelButton: true,
 			confirmButtonText: 'Add to Database', 
